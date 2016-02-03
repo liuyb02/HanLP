@@ -100,6 +100,7 @@
         <maven-source-plugin.version>2.4</maven-source-plugin.version>
 
         <junit.version>3.8.1</junit.version>
+        <maven.test.skip>true</maven.test.skip>
     </properties>
     <dependencies>
         <dependency>
@@ -107,6 +108,12 @@
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>2.1.1</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

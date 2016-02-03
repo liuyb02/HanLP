@@ -26,6 +26,7 @@ import com.hankcs.hanlp.summary.TextRankKeyword;
 import com.hankcs.hanlp.summary.TextRankSentence;
 import com.hankcs.hanlp.tokenizer.StandardTokenizer;
 import com.hankcs.hanlp.utility.Predefine;
+import org.elasticsearch.common.io.PathUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -177,13 +178,13 @@ public class HanLP
             Properties p = new Properties();
             try
             {
-                ClassLoader loader = Thread.currentThread().getContextClassLoader();
-                if (loader == null)
-                {  // IKVM (v.0.44.0.5) doesn't set context classloader
-                    loader = HanLP.Config.class.getClassLoader();
-                }
+//                ClassLoader loader = Thread.currentThread().getContextClassLoader();
+//                if (loader == null)
+//                {  // IKVM (v.0.44.0.5) doesn't set context classloader
+//                    loader = HanLP.Config.class.getClassLoader();
+//                }
                 p.load(new InputStreamReader(Predefine.HANLP_PROPERTIES_PATH == null ?
-                        loader.getResourceAsStream("hanlp.properties") :
+                        new FileInputStream(getConfigRoot() + "/hanlp.properties") :
                         new FileInputStream(Predefine.HANLP_PROPERTIES_PATH)
                         , "UTF-8"));
                 String root = p.getProperty("root", "").replaceAll("\\\\", "/");
@@ -452,5 +453,10 @@ public class HanLP
         // Parameter size in this method refers to the string length of the summary required;
         // The actual length of the summary generated may be short than the required length, but never longer;
         return TextRankSentence.getSummary(document, max_length);
+    }
+    public static String getConfigRoot() {
+        return PathUtils.get(
+                new File(HanLP.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParent(),"config")
+                .toAbsolutePath().toString();
     }
 }
